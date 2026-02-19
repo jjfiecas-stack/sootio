@@ -883,7 +883,7 @@ async function proxyNetflixMirrorStream(decodedUrl, req, res) {
 
         if (baseHeaders.Cookie) cookieParts.push(baseHeaders.Cookie);
         if (bypassCookie) {
-            cookieParts.push(`t_hash_t=${bypassCookie}`, 'ott=nf');
+            cookieParts.push(`t_hash_t=${bypassCookie}`, `t_hash=${bypassCookie}`, 'ott=nf');
         }
 
         const headers = {
