@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sootio
+    container_name: sootio
+    ports:
+      - "55771:55771"
+    volumes:
+      - sootio-data:/app/data  # Persist SQLite cache data
+    networks:
+      - proxy-net
+    env_file:
+      - .env1
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=error
+    command: ["npm", "run", "standalone"]
+
+    restart: always
+
+volumes:
+  sootio-data:  # Named volume for persistent data
+
+networks:
+  proxy-net:
+    external: true
