@@ -1,27 +1,29 @@
+version: '3.8'
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sootio
+    image: sootio:latest
     container_name: sootio
+    restart: always
     ports:
-      - "55771:55771"
+      - "55771:6907"
     volumes:
-      - sootio-data:/app/data  # Persist SQLite cache data
+      - sootio-data:/app/data
     networks:
       - proxy-net
     env_file:
       - .env1
     environment:
       - NODE_ENV=production
-      - LOG_LEVEL=info
-    command: ["npm", "run", "standalone"]
-
-    restart: always
+      - LOG_LEVEL=info  # This is what you want
+    # BYPASS NPM: We call node directly so the package.json "error" script is never read
+    command: ["node", "--max-old-space-size=12000", "--expose-gc", "server.js"]
 
 volumes:
-  sootio-data:  # Named volume for persistent data
+  sootio-data:
 
 networks:
   proxy-net:
