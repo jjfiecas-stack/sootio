@@ -6,8 +6,6 @@ services:
     image: sootio:latest
     container_name: sootio
     restart: always
-    ports:
-      - "55771:6907"
     volumes:
       - sootio-data:/app/data
     networks:
