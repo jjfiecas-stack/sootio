@@ -20,14 +20,14 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont
 
-# Tell Puppeteer to skip downloading its own Chromium (incompatible with Alpine/musl)
-# and use the system-installed one instead
+# Tell Puppeteer to skip downloading its own Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV CHROMIUM_PATH=/usr/bin/chromium-browser
 
-# Copy only dependency files first (better layer caching)
+# Copy only dependency files first
 COPY package*.json ./
-COPY pnpm-lock.yaml ./
+# Note: If you use pnpm-lock.yaml, ensure it exists in your fork root
+COPY pnpm-lock.yaml ./ 
 
 # Install pnpm and then dependencies
 RUN npm install -g pnpm@9 && pnpm install --no-frozen-lockfile
@@ -35,8 +35,8 @@ RUN npm install -g pnpm@9 && pnpm install --no-frozen-lockfile
 # Copy rest of the project files
 COPY . .
 
-# Expose app port (keep whatever your app actually listens on)
+# Expose app port
 EXPOSE 6907
 
-# Start the dev / app server
-CMD ["npm", "run", "start"]
+# CHANGE: Run the node command directly to allow Docker Compose overrides
+CMD ["node", "--max-old-space-size=12000", "--expose-gc", "server.js"]
