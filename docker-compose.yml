@@ -17,7 +17,7 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - LOG_LEVEL=error
+      - LOG_LEVEL=info
     command: ["npm", "run", "standalone"]
 
     restart: always
