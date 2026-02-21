@@ -21,8 +21,6 @@ services:
       - LOG_LEVEL=info  # This is what you want
     # BYPASS NPM: We call node directly so the package.json "error" script is never read
     command: ["node", "--max-old-space-size=12000", "--expose-gc", "server.js"]
-    networks:
-      - proxy-net
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
 
